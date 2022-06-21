@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
 import type { FormInstance, FormRules } from 'element-plus'
 
 const userType = {
@@ -10,7 +9,6 @@ const userType = {
   TEACH_SECRETARY: 2
 }
 const router = useRouter()
-const store = useAuthStore()
 const userFormRef = ref<FormInstance>()
 const userForm = ref({
   type: userType.STUDENT,
@@ -38,12 +36,10 @@ const userFormRules = ref<FormRules>({
 const submitForm = (formRef?: FormInstance) => {
   if (!formRef) return
   formRef.validate((valid) => {
-    console.log(valid)
     if (valid) {
       const { type, id, pwd } = userForm.value
-      localStorage.setItem('id', id)
-      store.changeAuth()
-      router.replace('/student/info')
+      localStorage.setItem('auth', JSON.stringify({ type, id }))
+      router.replace('/student')
     }
   })
 }
@@ -82,7 +78,7 @@ const submitForm = (formRef?: FormInstance) => {
   </div>
 </template>
 
-<style lang="less" scoped>
+<style scoped lang="less">
 .login {
   &-container {
     width: 30%;
