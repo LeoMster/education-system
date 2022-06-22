@@ -4,7 +4,7 @@
   <div>
     <el-row>
       <el-col class="student-info-col" :span="8">
-        <el-image style="width: 120px; height: 150px"  fit="fill" />
+        <el-image style="width: 120px; height: 150px" fit="fill" />
       </el-col>
       <el-col :span="16">
         <el-descriptions title="学生基本信息" :column="2">
@@ -44,7 +44,7 @@
 <style scoped lang="less">
 .student-info {
   &-col {
-    display: flex; 
+    display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;

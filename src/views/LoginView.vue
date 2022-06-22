@@ -48,11 +48,9 @@ const submitForm = (formRef?: FormInstance) => {
 </script>
 
 <template>
-  <el-card class="login-container" shadow="always">
-    <template #header>
-      <span>Education-System</span>
-    </template>
-    <div>
+  <el-card class="login-container" shadow="always" :body-style="{ padding: 0 }">
+    <div class="login-header">Education-System</div>
+    <div class="login-form-container">
       <el-form
         ref="userFormRef"
         :model="userForm"
@@ -93,6 +91,14 @@ const submitForm = (formRef?: FormInstance) => {
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
+  }
+  &-header {
+    padding: 20px;
+    background-color: #545c64;
+    color: #ffd04b;
+  }
+  &-form-container {
+    padding: 20px;
   }
 }
 </style>

@@ -27,14 +27,14 @@ const courseData: Course[] = [
   }
 ]
 
-const isDesign = computed(() => props.routePath === 'design')
+const isSearch = computed(() => props.routePath === 'search')
 
 const selectionTable = () => null
 </script>
 
 <template>
   <div class="student-plan-container">
-    <div class="student-plan-btns" v-show="isDesign">
+    <div class="student-plan-btns" v-show="!isSearch">
       <el-button type="primary">保存</el-button>
       <el-button type="primary">提交</el-button>
       <el-button type="primary">重置</el-button>
@@ -45,7 +45,7 @@ const selectionTable = () => null
       :data="courseData"
       @selection-change="selectionTable"
     >
-      <el-table-column type="selection" v-if="isDesign" />
+      <el-table-column type="selection" v-if="!isSearch" />
       <el-table-column property="courseId" label="课程编号" align="center" />
       <el-table-column property="courseName" label="课程名称" />
       <el-table-column property="courseType" label="课程类别" align="center" />

@@ -1,8 +1,8 @@
-import StudentInfo from '@/views/Student/StudentInfo.vue'
-import StudentPlanDesign from '@/views/Student/StudentPlanDesign.vue'
-import StudentPlanSearch from '@/views/Student/StudentPlanSearch.vue'
-import StudentCourseSelect from '@/views/Student/StudentCourseSelect.vue'
-import StudentScoreQuery from '@/views/Student/StudentScoreQuery.vue'
+import StudentInfo from '@/views/student/StudentInfo.vue'
+import StudentPlanDesign from '@/views/student/StudentPlanDesign.vue'
+import StudentPlanSearch from '@/views/student/StudentPlanSearch.vue'
+import StudentCourseSelect from '@/views/student/StudentCourseSelect.vue'
+import StudentScoreQuery from '@/views/student/StudentScoreQuery.vue'
 
 export default [
   {
