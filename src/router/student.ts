@@ -11,7 +11,7 @@ export default [
     component: StudentInfo
   },
   {
-    path: '/student/design-plan',
+    path: '/student/plan-design',
     name: '培养计划制定',
     component: StudentPlanDesign
   },

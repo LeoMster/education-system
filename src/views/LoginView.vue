@@ -20,9 +20,10 @@ const userFormRules = ref<FormRules>({
   id: [
     { required: true, message: '请输入学工号' },
     { min: 4, max: 10, message: '学工号长度为4-10位' },
-    { 
+    {
       validator(_, value, callback) {
-        if (!/^[\d]+$/.test(value)) return callback(new Error('学工号只能包含数字'))
+        if (!/^[\d]+$/.test(value))
+          return callback(new Error('学工号只能包含数字'))
         return callback()
       }
     }
@@ -38,6 +39,7 @@ const submitForm = (formRef?: FormInstance) => {
   formRef.validate((valid) => {
     if (valid) {
       const { type, id, pwd } = userForm.value
+      console.log(pwd)
       localStorage.setItem('auth', JSON.stringify({ type, id }))
       router.replace('/student')
     }
@@ -65,13 +67,19 @@ const submitForm = (formRef?: FormInstance) => {
           </el-radio-group>
         </el-form-item>
         <el-form-item label="学工号" prop="id" required>
-          <el-input v-model.trim="userForm.id" placeholder="请输入学工号"></el-input>
+          <el-input v-model.trim="userForm.id" placeholder="请输入学工号" />
         </el-form-item>
         <el-form-item label="密码" prop="pwd">
-          <el-input v-model.trim="userForm.pwd" type="password" placeholder="请输入统一身份认证密码"></el-input>
+          <el-input
+            v-model.trim="userForm.pwd"
+            type="password"
+            placeholder="请输入统一身份认证密码"
+          />
         </el-form-item>
       </el-form>
-      <el-button type="primary" @click="submitForm(userFormRef)">登录</el-button>
+      <el-button type="primary" @click="submitForm(userFormRef)">
+        登录
+      </el-button>
     </div>
   </el-card>
 </template>

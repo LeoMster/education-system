@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import TheStudentPlan from '@/components/student/TheStudentPlan.vue'
 </script>
 
 <template>
-  <div>2</div>
+  <TheStudentPlan />
 </template>

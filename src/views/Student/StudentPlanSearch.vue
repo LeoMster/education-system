@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import TheStudentPlan from '@/components/student/TheStudentPlan.vue'
+</script>
+
 <template>
-    <div>3</div>
+  <TheStudentPlan />
 </template>

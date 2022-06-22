@@ -1,5 +1,4 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div>
@@ -9,14 +8,14 @@
       </el-col>
       <el-col :span="16">
         <el-descriptions title="学生基本信息" :column="2">
-        <el-descriptions-item label="姓名">
-          kooriookami
-          <el-tag size="small">硕士</el-tag>
-        </el-descriptions-item>
-        <el-descriptions-item label="学号">18100000000</el-descriptions-item>
-        <el-descriptions-item label="院系">Suzhou</el-descriptions-item>
-        <el-descriptions-item label="专业">软件</el-descriptions-item>
-      </el-descriptions>
+          <el-descriptions-item label="姓名">
+            kooriookami
+            <el-tag size="small">硕士</el-tag>
+          </el-descriptions-item>
+          <el-descriptions-item label="学号">18100000000</el-descriptions-item>
+          <el-descriptions-item label="院系">Suzhou</el-descriptions-item>
+          <el-descriptions-item label="专业">软件</el-descriptions-item>
+        </el-descriptions>
       </el-col>
     </el-row>
     <div class="student-info-score">

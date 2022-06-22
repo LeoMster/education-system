@@ -2,20 +2,30 @@
 import { computed } from 'vue'
 import studentMenuList from '@/router/student'
 
-const menuList = [
-  [ ...studentMenuList ]
-]
+const menuList = [[...studentMenuList]]
 const { type = 0 } = JSON.parse(localStorage.getItem('auth') || '{}')
 
-const currentMenuList = computed(() => menuList[type]) 
+const currentMenuList = computed(() => menuList[type])
 const defaultActiveMenu = computed(() => menuList[type][0].path)
 </script>
 
 <template>
   <el-container class="layout">
     <el-aside width="200px">
-      <el-menu class="layout-menu" :default-active="defaultActiveMenu" active-color="#ffd04b" router>
-        <el-menu-item v-for="{ path, name } of currentMenuList" :index="path" :key="path">
+      <el-menu
+        class="layout-menu"
+        :default-active="defaultActiveMenu"
+        active-color="#ffd04b"
+        active-text-color="#ffd04b"
+        background-color="#545c64"
+        text-color="#fff"
+        router
+      >
+        <el-menu-item
+          v-for="{ path, name } of currentMenuList"
+          :index="path"
+          :key="path"
+        >
           <template #title>{{ name }}</template>
         </el-menu-item>
       </el-menu>
@@ -39,8 +49,8 @@ const defaultActiveMenu = computed(() => menuList[type][0].path)
   }
   &-header {
     line-height: 60px;
+    background-color: #545c64;
+    color: #ffd04b;
   }
 }
 </style>
-
-
