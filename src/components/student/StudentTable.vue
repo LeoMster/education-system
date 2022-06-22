@@ -41,6 +41,7 @@ const selectionTable = () => null
     </div>
     <el-table
       class="student-plan-table"
+      :class="{ 'student-plan-table-top': isSearch }"
       ref="multipleTableRef"
       :data="courseData"
       @selection-change="selectionTable"
@@ -76,6 +77,9 @@ const selectionTable = () => null
   }
   &-table {
     margin: 40px 0 40px 0;
+    &-top {
+      margin-top: 20px;
+    }
   }
   &-unvisible {
     display: none;

@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div>
+  <div class="student-info-container">
     <el-row>
       <el-col class="student-info-col" :span="8">
         <el-image style="width: 120px; height: 150px" fit="fill" />
@@ -43,6 +43,9 @@
 
 <style scoped lang="less">
 .student-info {
+  &-container {
+    margin-top: 20px;
+  }
   &-col {
     display: flex;
     align-items: center;
@@ -53,7 +56,7 @@
     }
   }
   &-score {
-    margin-top: 80px;
+    margin-top: 150px;
     &-container {
       width: 150px;
       height: 150px;
