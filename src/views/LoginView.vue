@@ -46,36 +46,34 @@ const submitForm = (formRef?: FormInstance) => {
 </script>
 
 <template>
-  <div class="login-container">
-    <el-card shadow="always">
-      <template #header>
-        <span>Education-System</span>
-      </template>
-      <div>
-        <el-form
-          ref="userFormRef"
-          :model="userForm"
-          :rules="userFormRules"
-          label-position="top"
-        >
-          <el-form-item label="用户类型" prop="type">
-            <el-radio-group v-model="userForm.type">
-              <el-radio :label="userType.STUDENT">学生</el-radio>
-              <el-radio :label="userType.TEACHER">教师</el-radio>
-              <el-radio :label="userType.TEACH_SECRETARY">教学秘书</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="学工号" prop="id" required>
-            <el-input v-model.trim="userForm.id" placeholder="请输入学工号"></el-input>
-          </el-form-item>
-          <el-form-item label="密码" prop="pwd">
-            <el-input v-model.trim="userForm.pwd" type="password" placeholder="请输入统一身份认证密码"></el-input>
-          </el-form-item>
-        </el-form>
-        <el-button type="primary" @click="submitForm(userFormRef)">登录</el-button>
-      </div>
-    </el-card>
-  </div>
+  <el-card class="login-container" shadow="always">
+    <template #header>
+      <span>Education-System</span>
+    </template>
+    <div>
+      <el-form
+        ref="userFormRef"
+        :model="userForm"
+        :rules="userFormRules"
+        label-position="top"
+      >
+        <el-form-item label="用户类型" prop="type">
+          <el-radio-group v-model="userForm.type">
+            <el-radio :label="userType.STUDENT">学生</el-radio>
+            <el-radio :label="userType.TEACHER">教师</el-radio>
+            <el-radio :label="userType.TEACH_SECRETARY">教学秘书</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="学工号" prop="id" required>
+          <el-input v-model.trim="userForm.id" placeholder="请输入学工号"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="pwd">
+          <el-input v-model.trim="userForm.pwd" type="password" placeholder="请输入统一身份认证密码"></el-input>
+        </el-form-item>
+      </el-form>
+      <el-button type="primary" @click="submitForm(userFormRef)">登录</el-button>
+    </div>
+  </el-card>
 </template>
 
 <style scoped lang="less">
