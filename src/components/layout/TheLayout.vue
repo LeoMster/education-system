@@ -1,9 +1,15 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import studentMenuList from '@/router/student'
+import { Expand } from '@element-plus/icons-vue'
 
 const menuList = [[...studentMenuList]]
 const { type = 0 } = JSON.parse(localStorage.getItem('auth') || '{}')
+const isCollapse = ref(true)
+
+const toggleCollapse = () => {
+  isCollapse.value = !isCollapse.value
+}
 
 const currentMenuList = computed(() => menuList[type])
 const defaultActiveMenu = computed(() => menuList[type][0].path)
@@ -11,10 +17,11 @@ const defaultActiveMenu = computed(() => menuList[type][0].path)
 
 <template>
   <el-container class="layout">
-    <el-aside width="200px">
+    <el-aside width="auto">
       <el-menu
         class="layout-menu"
         :default-active="defaultActiveMenu"
+        :collapse="isCollapse"
         active-color="#ffd04b"
         active-text-color="#ffd04b"
         background-color="#545c64"
@@ -22,13 +29,26 @@ const defaultActiveMenu = computed(() => menuList[type][0].path)
         router
       >
         <el-menu-item
-          v-for="{ path, name } of currentMenuList"
+          v-for="{ path, name, icon } of currentMenuList"
           :index="path"
           :key="path"
         >
-          <template #title>{{ name }}</template>
+          <el-icon><component :is="icon" /></el-icon>
+          <template #title>
+            {{ name }}
+          </template>
         </el-menu-item>
+        <el-icon
+          class="layout-collapse-btn"
+          :class="{ 'layout-btn-rotate': !isCollapse }"
+          color="#fff"
+          :size="18"
+          @click="toggleCollapse"
+        >
+          <Expand />
+        </el-icon>
       </el-menu>
+      <div class="layout-menu-collapse"></div>
     </el-aside>
     <el-container>
       <el-header class="layout-header">
@@ -44,8 +64,21 @@ const defaultActiveMenu = computed(() => menuList[type][0].path)
 <style scoped lang="less">
 .layout {
   height: 100vh;
-  &-menu {
+  .el-menu--collapse {
     height: 100%;
+  }
+  &-menu:not(.el-menu--collapse) {
+    width: 200px;
+    height: 100%;
+  }
+  &-collapse-btn {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    transform: translateX(-50%);
+  }
+  &-btn-rotate {
+    transform: translateX(-50%) rotate(180deg);
   }
   &-header {
     line-height: 60px;
