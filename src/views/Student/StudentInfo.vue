@@ -56,7 +56,7 @@
     }
   }
   &-score {
-    margin-top: 150px;
+    margin-top: 70px;
     &-container {
       width: 150px;
       height: 150px;

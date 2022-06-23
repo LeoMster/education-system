@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import type { FormInstance, FormRules } from 'element-plus'
 
@@ -34,6 +34,10 @@ const userFormRules = ref<FormRules>({
   ]
 })
 
+onMounted(() => {
+  localStorage.removeItem('auth')
+})
+
 const submitForm = (formRef?: FormInstance) => {
   if (!formRef) return
   formRef.validate((valid) => {
@@ -41,49 +45,71 @@ const submitForm = (formRef?: FormInstance) => {
       const { type, id, pwd } = userForm.value
       console.log(pwd)
       localStorage.setItem('auth', JSON.stringify({ type, id }))
-      router.replace('/student')
+      switch (type) {
+        case 0:
+          router.replace('/student')
+          break
+        case 1:
+          router.replace('./teacher')
+          break
+        case 2:
+          router.replace('./secretary')
+          break
+      }
     }
   })
 }
 </script>
 
 <template>
-  <el-card class="login-container" shadow="always" :body-style="{ padding: 0 }">
-    <div class="login-header">Education-System</div>
-    <div class="login-form-container">
-      <el-form
-        ref="userFormRef"
-        :model="userForm"
-        :rules="userFormRules"
-        label-position="top"
-      >
-        <el-form-item label="用户类型" prop="type">
-          <el-radio-group v-model="userForm.type">
-            <el-radio :label="userType.STUDENT">学生</el-radio>
-            <el-radio :label="userType.TEACHER">教师</el-radio>
-            <el-radio :label="userType.TEACH_SECRETARY">教学秘书</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="学工号" prop="id" required>
-          <el-input v-model.trim="userForm.id" placeholder="请输入学工号" />
-        </el-form-item>
-        <el-form-item label="密码" prop="pwd">
-          <el-input
-            v-model.trim="userForm.pwd"
-            type="password"
-            placeholder="请输入统一身份认证密码"
-          />
-        </el-form-item>
-      </el-form>
-      <el-button type="primary" @click="submitForm(userFormRef)">
-        登录
-      </el-button>
-    </div>
-  </el-card>
+  <div class="login-bg">
+    <el-card
+      class="login-container"
+      shadow="always"
+      :body-style="{ padding: 0 }"
+    >
+      <div class="login-header">Education-System</div>
+      <div class="login-form-container">
+        <el-form
+          ref="userFormRef"
+          :model="userForm"
+          :rules="userFormRules"
+          label-position="top"
+        >
+          <el-form-item label="用户类型" prop="type">
+            <el-radio-group v-model="userForm.type">
+              <el-radio :label="userType.STUDENT">学生</el-radio>
+              <el-radio :label="userType.TEACHER">教师</el-radio>
+              <el-radio :label="userType.TEACH_SECRETARY">教学秘书</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="学工号" prop="id" required>
+            <el-input v-model.trim="userForm.id" placeholder="请输入学工号" />
+          </el-form-item>
+          <el-form-item label="密码" prop="pwd">
+            <el-input
+              v-model.trim="userForm.pwd"
+              type="password"
+              placeholder="请输入统一身份认证密码"
+            />
+          </el-form-item>
+        </el-form>
+        <el-button type="primary" @click="submitForm(userFormRef)">
+          登录
+        </el-button>
+      </div>
+    </el-card>
+  </div>
 </template>
 
 <style scoped lang="less">
 .login {
+  &-bg {
+    width: 100%;
+    height: 100vh;
+    // background-image: url('@/assets/bg.jpg');
+    background-size: 100% 100%;
+  }
   &-container {
     width: 30%;
     position: absolute;
@@ -94,8 +120,11 @@ const submitForm = (formRef?: FormInstance) => {
   }
   &-header {
     padding: 20px;
-    background-color: #545c64;
-    color: #ffd04b;
+    // background-color: #545c64;
+    // color: #ffd04b;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom: 1px solid rgb(228, 231, 237);
   }
   &-form-container {
     padding: 20px;

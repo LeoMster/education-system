@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import studentMenuList from '@/router/student'
+import teacherMenuList from '@/router/teacher'
 import { Expand } from '@element-plus/icons-vue'
 
-const menuList = [[...studentMenuList]]
+const menuList = [[...studentMenuList], [...teacherMenuList]]
 const { type = 0 } = JSON.parse(localStorage.getItem('auth') || '{}')
 const isCollapse = ref(true)
 
@@ -54,7 +55,7 @@ const defaultActiveMenu = computed(() => menuList[type][0].path)
       <el-header class="layout-header">
         <span>当前学期</span>
       </el-header>
-      <el-main>
+      <el-main :style="{ background: 'none' }">
         <slot></slot>
       </el-main>
     </el-container>
@@ -75,6 +76,7 @@ const defaultActiveMenu = computed(() => menuList[type][0].path)
     position: absolute;
     left: 50%;
     bottom: 10px;
+    cursor: pointer;
     transform: translateX(-50%);
   }
   &-btn-rotate {
