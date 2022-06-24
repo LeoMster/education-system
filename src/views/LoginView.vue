@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import { userLogin } from '@/api/student'
 import type { UserLoginParams } from '@/api/student'
@@ -41,10 +42,32 @@ onMounted(() => {
 })
 
 /** 登录请求 */
-const userLoginRequest = async (params: UserLoginParams) => {
+const requestUserLogin = async (params: UserLoginParams) => {
   try {
-    const data = await userLogin(params)
-    console.log(data)
+    const { data: res } = await userLogin(params)
+    const { code, data, msg } = res
+    if (code === 200) {
+      const { type, id, name } = data[0]
+      localStorage.setItem(
+        'auth',
+        JSON.stringify({ type: Number(type), id, name })
+      )
+      switch (Number(type)) {
+        case 0:
+          router.replace('/student')
+          break
+        case 1:
+          router.replace('./teacher')
+          break
+        case 2:
+          router.replace('./secretary')
+          break
+      }
+      ElMessage({
+        type: 'success',
+        message: msg
+      })
+    }
   } catch (error) {
     console.log(error)
   }
@@ -55,19 +78,7 @@ const submitForm = (formRef?: FormInstance) => {
   formRef.validate((valid) => {
     if (valid) {
       const { type, id, pwd } = userForm.value
-      localStorage.setItem('auth', JSON.stringify({ type, id }))
-      userLoginRequest({ type, id, pwd })
-      // switch (type) {
-      //   case 0:
-      //     router.replace('/student')
-      //     break
-      //   case 1:
-      //     router.replace('./teacher')
-      //     break
-      //   case 2:
-      //     router.replace('./secretary')
-      //     break
-      // }
+      requestUserLogin({ type, id, pwd })
     }
   })
 }
