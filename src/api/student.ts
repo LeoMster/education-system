@@ -7,4 +7,4 @@ export interface UserLoginParams {
 }
 
 /** 登录 */
-export const userLogin = (params: UserLoginParams) => axios.post('xxx', {...params})
+export const userLogin = (params: UserLoginParams) => axios.post('/api/student/login', {...params})

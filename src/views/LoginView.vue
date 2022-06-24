@@ -57,17 +57,17 @@ const submitForm = (formRef?: FormInstance) => {
       const { type, id, pwd } = userForm.value
       localStorage.setItem('auth', JSON.stringify({ type, id }))
       userLoginRequest({ type, id, pwd })
-      switch (type) {
-        case 0:
-          router.replace('/student')
-          break
-        case 1:
-          router.replace('./teacher')
-          break
-        case 2:
-          router.replace('./secretary')
-          break
-      }
+      // switch (type) {
+      //   case 0:
+      //     router.replace('/student')
+      //     break
+      //   case 1:
+      //     router.replace('./teacher')
+      //     break
+      //   case 2:
+      //     router.replace('./secretary')
+      //     break
+      // }
     }
   })
 }
