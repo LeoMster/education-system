@@ -2,6 +2,8 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import type { FormInstance, FormRules } from 'element-plus'
+import { userLogin } from '@/api/student'
+import type { UserLoginParams } from '@/api/student'
 
 const userType = {
   STUDENT: 0,
@@ -38,13 +40,23 @@ onMounted(() => {
   localStorage.removeItem('auth')
 })
 
+/** 登录请求 */
+const userLoginRequest = async (params: UserLoginParams) => {
+  try {
+    const data = await userLogin(params)
+    console.log(data)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const submitForm = (formRef?: FormInstance) => {
   if (!formRef) return
   formRef.validate((valid) => {
     if (valid) {
       const { type, id, pwd } = userForm.value
-      console.log(pwd)
       localStorage.setItem('auth', JSON.stringify({ type, id }))
+      userLoginRequest({ type, id, pwd })
       switch (type) {
         case 0:
           router.replace('/student')
