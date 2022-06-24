@@ -9,6 +9,9 @@ interface StudentMsg {
   department: string
   professionId: number
   studentImg:string
+  requriedScore:number
+  optionalScore:number
+  allScore:number
 }
 
 const studentMsg = shallowRef <StudentMsg>({
@@ -18,6 +21,9 @@ const studentMsg = shallowRef <StudentMsg>({
   department: '',
   professionId: 0,
   studentImg:'',
+  requriedScore:0,
+  optionalScore:0,
+  allScore:0
 })
 
 const classType = computed(() => (studentMsg.value.classId ? '学硕' : '专硕'))
@@ -45,7 +51,7 @@ const requestStudentMsg = async () => {
       //const {studentName,studentId,classId,department,professionId,studentImg} = data[0]
       //studentMsg.value = {studentName,studentId,classId,department,professionId,studentImg}
       studentMsg.value = data[0]
-      console.log(studentMsg.value.department)
+      //console.log(studentMsg.value.department)
     }
   } catch (error) {
     console.log(error)
@@ -86,22 +92,22 @@ onMounted(() => {
       <el-row>
         <el-col class="student-info-col" :span="8">
           <div class="student-info-score-container student-info-col">
-            <p>14</p>
-            <p>总计28</p>
+            <p>{{studentMsg.allScore}}</p>
+            <p>总计34</p>
           </div>
           <h6>总学分</h6>
         </el-col>
         <el-col class="student-info-col" :span="8">
           <div class="student-info-score-container student-info-col">
-            <p>14</p>
-            <p>总计28</p>
+            <p>{{studentMsg.requriedScore}}</p>
+            <p>总计18</p>
           </div>
           <h6>必修学分</h6>
         </el-col>
         <el-col class="student-info-col" :span="8">
           <div class="student-info-score-container student-info-col">
-            <p>14</p>
-            <p>总计28</p>
+            <p>{{studentMsg.optionalScore}}</p>
+            <p>总计16</p>
           </div>
           <h6>选修分</h6>
         </el-col>
