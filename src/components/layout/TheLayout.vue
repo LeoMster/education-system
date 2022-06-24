@@ -2,9 +2,14 @@
 import { ref, computed } from 'vue'
 import studentMenuList from '@/router/student'
 import teacherMenuList from '@/router/teacher'
+import secretaryMenuList from '@/router/secretary'
 import { Expand } from '@element-plus/icons-vue'
 
-const menuList = [[...studentMenuList], [...teacherMenuList]]
+const menuList = [
+  [...studentMenuList],
+  [...teacherMenuList],
+  [...secretaryMenuList]
+]
 const { type = 0 } = JSON.parse(localStorage.getItem('auth') || '{}')
 const isCollapse = ref(true)
 
@@ -30,7 +35,7 @@ const defaultActiveMenu = computed(() => menuList[type][0].path)
         router
       >
         <el-menu-item
-          v-for="{ path, name, icon } of currentMenuList"
+          v-for="{ path, name, icon, children } of currentMenuList"
           :index="path"
           :key="path"
         >
@@ -38,6 +43,10 @@ const defaultActiveMenu = computed(() => menuList[type][0].path)
           <template #title>
             {{ name }}
           </template>
+          <el-sub-menu v-if="children?.length">
+            <el-menu-item>1</el-menu-item>
+            <el-menu-item>2</el-menu-item>
+          </el-sub-menu>
         </el-menu-item>
         <el-icon
           class="layout-collapse-btn"

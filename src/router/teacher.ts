@@ -7,5 +7,5 @@ export default [
     name: '课程管理',
     component: TeacherCourseManage,
     icon: EditPen
-  },
+  }
 ]
