@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { shallowRef , computed, onMounted } from 'vue'
 import { getStudentMsg } from '@/api/student'
 
 interface StudentMsg {
@@ -8,14 +8,16 @@ interface StudentMsg {
   studentId: string
   department: string
   professionId: number
+  studentImg:string
 }
 
-const studentMsg = ref<StudentMsg>({
+const studentMsg = shallowRef <StudentMsg>({
   studentName: '',
   classId: 0,
   studentId: '',
   department: '',
-  professionId: 0
+  professionId: 0,
+  studentImg:'',
 })
 
 const classType = computed(() => (studentMsg.value.classId ? '学硕' : '专硕'))
@@ -39,7 +41,11 @@ const requestStudentMsg = async () => {
     const { data: res } = await getStudentMsg(id)
     const { code, data } = res
     if (code === 200) {
-      studentMsg.value = data
+      
+      //const {studentName,studentId,classId,department,professionId,studentImg} = data[0]
+      //studentMsg.value = {studentName,studentId,classId,department,professionId,studentImg}
+      studentMsg.value = data[0]
+      console.log(studentMsg.value.department)
     }
   } catch (error) {
     console.log(error)
