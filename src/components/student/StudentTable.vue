@@ -27,7 +27,8 @@ const requestStudentCourseList = async () => {
     const { data: res } = await getStudentCourseList()
     const { code, data } = res
     if (code === 200) {
-      courseData.value = data[0]
+      courseData.value = data
+      pageChange(1)
     }
   } catch (error) {
     console.log(error)
@@ -36,12 +37,13 @@ const requestStudentCourseList = async () => {
 
 onMounted(() => {
   requestStudentCourseList()
-  pageChange(1)
+  //pageChange(1)
 })
 
 const selectionTable = () => null
 
 const pageChange = (page: number) => {
+  console.log(page);
   currentPageData.value = courseData.value?.slice(
     (page - 1) * PAGE_SIZE,
     page * PAGE_SIZE

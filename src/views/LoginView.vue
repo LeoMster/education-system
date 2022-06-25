@@ -43,42 +43,42 @@ onMounted(() => {
 
 /** 登录请求 */
 const requestUserLogin = async (params: UserLoginParams) => {
-  localStorage.setItem('auth', JSON.stringify({ type: 0, id: '', name: '' }))
-  router.replace('./student')
-  // try {
-  //   const { data: res } = await userLogin(params)
-  //   const { code, data, msg } = res
-  //   if (code === 200) {
-  //     const { type, id, name } = data[0]
-  //     localStorage.setItem(
-  //       'auth',
-  //       JSON.stringify({ type: Number(type), id, name })
-  //     )
-  //     switch (Number(type)) {
-  //       case 0:
-  //         router.replace('/student')
-  //         break
-  //       case 1:
-  //         router.replace('./teacher')
-  //         break
-  //       case 2:
-  //         router.replace('./secretary')
-  //         break
-  //     }
-  //     ElMessage({
-  //       type: 'success',
-  //       message: msg
-  //     })
-  //   }
-  //   if (code === 400) {
-  //     ElMessage({
-  //       type: 'error',
-  //       message: msg
-  //     })
-  //   }
-  // } catch (error) {
-  //   console.log(error)
-  // }
+  //localStorage.setItem('auth', JSON.stringify({ type: 0, id: '', name: '' }))
+  //router.replace('./student')
+  try {
+    const { data: res } = await userLogin(params)
+    const { code, data, msg } = res
+    if (code === 200) {
+      const { type, id, name } = data[0]
+      localStorage.setItem(
+        'auth',
+        JSON.stringify({ type: Number(type), id, name })
+      )
+      switch (Number(type)) {
+        case 0:
+          router.replace('/student')
+          break
+        case 1:
+          router.replace('./teacher')
+          break
+        case 2:
+          router.replace('./secretary')
+          break
+      }
+      ElMessage({
+        type: 'success',
+        message: msg
+      })
+    }
+    if (code === 400) {
+      ElMessage({
+        type: 'error',
+        message: msg
+      })
+    }
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 const submitForm = (formRef?: FormInstance) => {
