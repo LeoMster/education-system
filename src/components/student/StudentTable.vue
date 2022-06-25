@@ -1,35 +1,52 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { getStudentCourseList } from '@/api/student'
 
 interface Course {
   courseId: string
   courseName: string
-  courseType: string
-  credit: number
-  creditHours: number
-  term: number
-  teacher: string
+  courseType: number
+  courseTime: number
+  courseResult: number
+  courseTeacher: string
+  courseTerm: number
 }
 
 const props = defineProps<{
   routePath: string
 }>()
 
-const courseData: Course[] = [
-  {
-    courseId: '1',
-    courseName: 'xxx',
-    courseType: '选修',
-    credit: 10,
-    creditHours: 20,
-    term: 1,
-    teacher: 'hyn'
-  }
-]
+const courseData = ref<Course[]>([])
+const currentPageData = ref<Course[]>([])
+const PAGE_SIZE = 10
 
 const isSearch = computed(() => props.routePath === 'search')
 
+const requestStudentCourseList = async () => {
+  try {
+    const { data: res } = await getStudentCourseList()
+    const { code, data } = res
+    if (code === 200) {
+      courseData.value = data[0]
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+onMounted(() => {
+  requestStudentCourseList()
+  pageChange(1)
+})
+
 const selectionTable = () => null
+
+const pageChange = (page: number) => {
+  currentPageData.value = courseData.value?.slice(
+    (page - 1) * PAGE_SIZE,
+    page * PAGE_SIZE
+  )
+}
 </script>
 
 <template>
@@ -43,23 +60,32 @@ const selectionTable = () => null
       class="student-plan-table"
       :class="{ 'student-plan-table-top': isSearch }"
       ref="multipleTableRef"
-      :data="courseData"
+      :data="currentPageData"
       @selection-change="selectionTable"
     >
       <el-table-column type="selection" v-if="!isSearch" />
       <el-table-column property="courseId" label="课程编号" align="center" />
-      <el-table-column property="courseName" label="课程名称" />
-      <el-table-column property="courseType" label="课程类别" align="center" />
-      <el-table-column property="credit" label="学分" align="center" />
-      <el-table-column property="creditHours" label="学时" align="center" />
-      <el-table-column property="term" label="学期" align="center" />
-      <el-table-column property="teacher" label="任课教师" align="center" />
+      <el-table-column property="courseName" label="课程名称" align="center" />
+      <el-table-column property="courseType" label="课程类别" align="center">
+        <template #default="scope">
+          {{ scope.row.courseType ? '必修' : '选修' }}
+        </template>
+      </el-table-column>
+      <el-table-column property="courseResult" label="学分" align="center" />
+      <el-table-column property="courseTime" label="学时" align="center" />
+      <el-table-column property="courseTerm" label="学期" align="center" />
+      <el-table-column
+        property="courseTeacher"
+        label="任课教师"
+        align="center"
+      />
     </el-table>
     <el-pagination
       class="student-plan-page"
       background
       layout="prev, pager, next"
-      :total="50"
+      :total="courseData.length"
+      @current-change="pageChange"
     />
   </div>
 </template>
