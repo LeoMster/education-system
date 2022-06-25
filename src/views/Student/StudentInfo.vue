@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { shallowRef , computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { getStudentMsg } from '@/api/student'
 
 interface StudentMsg {
@@ -8,22 +8,22 @@ interface StudentMsg {
   studentId: string
   department: string
   professionId: number
-  studentImg:string
-  requriedScore:number
-  optionalScore:number
-  allScore:number
+  studentImg: string
+  requiredScore: number
+  optionalScore: number
+  allScore: number
 }
 
-const studentMsg = shallowRef <StudentMsg>({
+const studentMsg = ref<StudentMsg>({
   studentName: '',
   classId: 0,
   studentId: '',
   department: '',
   professionId: 0,
-  studentImg:'',
-  requriedScore:0,
-  optionalScore:0,
-  allScore:0
+  studentImg: '',
+  requiredScore: 0,
+  optionalScore: 0,
+  allScore: 0
 })
 
 const classType = computed(() => (studentMsg.value.classId ? '学硕' : '专硕'))
@@ -47,11 +47,7 @@ const requestStudentMsg = async () => {
     const { data: res } = await getStudentMsg(id)
     const { code, data } = res
     if (code === 200) {
-      
-      //const {studentName,studentId,classId,department,professionId,studentImg} = data[0]
-      //studentMsg.value = {studentName,studentId,classId,department,professionId,studentImg}
       studentMsg.value = data[0]
-      //console.log(studentMsg.value.department)
     }
   } catch (error) {
     console.log(error)
@@ -92,21 +88,21 @@ onMounted(() => {
       <el-row>
         <el-col class="student-info-col" :span="8">
           <div class="student-info-score-container student-info-col">
-            <p>{{studentMsg.allScore}}</p>
+            <p>{{ studentMsg.allScore }}</p>
             <p>总计34</p>
           </div>
           <h6>总学分</h6>
         </el-col>
         <el-col class="student-info-col" :span="8">
           <div class="student-info-score-container student-info-col">
-            <p>{{studentMsg.requriedScore}}</p>
+            <p>{{ studentMsg.requiredScore }}</p>
             <p>总计18</p>
           </div>
           <h6>必修学分</h6>
         </el-col>
         <el-col class="student-info-col" :span="8">
           <div class="student-info-score-container student-info-col">
-            <p>{{studentMsg.optionalScore}}</p>
+            <p>{{ studentMsg.optionalScore }}</p>
             <p>总计16</p>
           </div>
           <h6>选修分</h6>
