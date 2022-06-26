@@ -59,10 +59,10 @@ const requestUserLogin = async (params: UserLoginParams) => {
           router.replace('/student')
           break
         case 1:
-          router.replace('./teacher')
+          router.replace('/teacher')
           break
         case 2:
-          router.replace('./secretary')
+          router.replace('/secretary')
           break
       }
       ElMessage({
