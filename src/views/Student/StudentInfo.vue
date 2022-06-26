@@ -63,7 +63,11 @@ onMounted(() => {
   <div class="student-info-container">
     <el-row>
       <el-col class="student-info-col" :span="8">
-        <el-image :src="studentMsg.studentImg" style="width: 120px; height: 150px" fit="fill" />
+        <el-image
+          :src="studentMsg.studentImg"
+          style="width: 120px; height: 150px"
+          fit="fill"
+        />
       </el-col>
       <el-col :span="16">
         <el-descriptions title="学生基本信息" :column="2">

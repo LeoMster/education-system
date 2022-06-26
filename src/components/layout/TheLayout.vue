@@ -1,21 +1,19 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import studentMenuList from '@/router/student'
 import teacherMenuList from '@/router/teacher'
 import secretaryMenuList from '@/router/secretary'
-import { Expand } from '@element-plus/icons-vue'
+import { Expand, ArrowDownBold } from '@element-plus/icons-vue'
 
 const menuList = [
   [...studentMenuList],
   [...teacherMenuList],
   [...secretaryMenuList]
 ]
-const { type = 0 } = JSON.parse(localStorage.getItem('auth') || '{}')
+const { type = 0, name } = JSON.parse(localStorage.getItem('auth') || '{}')
 const isCollapse = ref(true)
-
-const toggleCollapse = () => {
-  isCollapse.value = !isCollapse.value
-}
+const router = useRouter()
 
 const currentMenuList = computed(() => menuList[type])
 const defaultActiveMenu = computed(() => {
@@ -24,6 +22,14 @@ const defaultActiveMenu = computed(() => {
     ? menuFirstItem.children[0].path
     : menuFirstItem.path
 })
+
+const toggleCollapse = () => {
+  isCollapse.value = !isCollapse.value
+}
+
+const userLogOut = () => {
+  router.replace('/login')
+}
 </script>
 
 <template>
@@ -77,9 +83,25 @@ const defaultActiveMenu = computed(() => {
     </el-aside>
     <el-container>
       <el-header class="layout-header">
-        <span>当前学期</span>
+        <el-row>
+          <el-col :span="12">
+            <span class="layout-header-title">当前学期：</span>
+            <span>2021-2022学年</span>
+          </el-col>
+          <el-col :span="12" class="layout-header-right">
+            <el-dropdown>
+              <el-icon color="#fff"><ArrowDownBold /></el-icon>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item @click="userLogOut">退出</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+            <div class="layout-header-right-name">{{ name }}</div>
+          </el-col>
+        </el-row>
       </el-header>
-      <el-main :style="{ background: 'none' }">
+      <el-main>
         <slot></slot>
       </el-main>
     </el-container>
@@ -110,6 +132,20 @@ const defaultActiveMenu = computed(() => {
     line-height: 60px;
     background-color: #545c64;
     color: #ffd04b;
+    &-title {
+      color: #fff;
+    }
+    &-term {
+      text-align: right;
+    }
+    &-right {
+      display: flex;
+      align-items: center;
+      justify-content: right;
+      &-name {
+        margin: 0 20px 0 10px;
+      }
+    }
   }
 }
 </style>

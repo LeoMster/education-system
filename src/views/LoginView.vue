@@ -43,8 +43,8 @@ onMounted(() => {
 
 /** 登录请求 */
 const requestUserLogin = async (params: UserLoginParams) => {
-  //localStorage.setItem('auth', JSON.stringify({ type: 0, id: '', name: '' }))
-  //router.replace('./student')
+  // localStorage.setItem('auth', JSON.stringify({ type: 0, id: '110', name: 'xxx' }))
+  // router.replace('./student')
   try {
     const { data: res } = await userLogin(params)
     const { code, data, msg } = res

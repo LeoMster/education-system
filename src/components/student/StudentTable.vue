@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { getStudentCourseList } from '@/api/student'
+import { ref, computed, onMounted, nextTick } from 'vue'
+import { ElMessage, ElTable } from 'element-plus'
+import { getIsSubmit, getStudentCourseList, planDesignSaveAndSubmit } from '@/api/student'
 
 interface Course {
   courseId: string
@@ -10,25 +11,71 @@ interface Course {
   courseResult: number
   courseTeacher: string
   courseTerm: number
+  isChecked: boolean
 }
 
 const props = defineProps<{
   routePath: string
 }>()
 
+const { id } = JSON.parse(localStorage.getItem('auth') || '{}')
+const multipleTableRef = ref<InstanceType<typeof ElTable>>()
+const isSubmit = ref<boolean>(false)
 const courseData = ref<Course[]>([])
-const currentPageData = ref<Course[]>([])
+const courseSelection = ref<Course[]>([])
+const currentPage = ref<number>(1)
 const PAGE_SIZE = 10
 
 const isSearch = computed(() => props.routePath === 'search')
+const currentPageData = computed(() =>
+  courseData?.value.slice(
+    (currentPage.value - 1) * PAGE_SIZE,
+    currentPage.value * PAGE_SIZE
+  )
+)
 
+/** 是否已经提交 */
+const requestIsSubmit = async () => {
+  try {
+    const { data: res } = await getIsSubmit(id)
+    const { code, data } = res
+    if (code === 200) {
+      isSubmit.value = data
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+/** 请求课程列表 */
 const requestStudentCourseList = async () => {
   try {
-    const { data: res } = await getStudentCourseList()
+    const { data: res } = await getStudentCourseList(id)
     const { code, data } = res
     if (code === 200) {
       courseData.value = data
-      pageChange(1)
+      defaultChecked()
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+/** 保存或提交培养计划 */
+const requestPlanDesignSaveAndSubmit = async (type: number) => {
+  const list = courseSelection.value.map((select) => select.courseId)
+  try {
+    const { data: res } = await planDesignSaveAndSubmit({ type, id, list })
+    const { code, msg } = res
+    if (code === 200) {
+      ElMessage({
+        type: 'success',
+        message: msg
+      })
+    }
+    if (code === 400) {
+      ElMessage({
+        type: 'error',
+        message: msg
+      })
     }
   } catch (error) {
     console.log(error)
@@ -36,36 +83,67 @@ const requestStudentCourseList = async () => {
 }
 
 onMounted(() => {
+  requestIsSubmit()
   requestStudentCourseList()
-  //pageChange(1)
 })
 
-const selectionTable = () => null
+const defaultChecked = async () => {
+  await nextTick()
+  courseData.value.forEach((row) => {
+    if (row.isChecked) {
+      multipleTableRef.value?.toggleRowSelection(row, true)
+    }
+  })
+}
 
 const pageChange = (page: number) => {
-  console.log(page);
-  currentPageData.value = courseData.value?.slice(
-    (page - 1) * PAGE_SIZE,
-    page * PAGE_SIZE
-  )
+  currentPage.value = page
+}
+
+const selectionChangeTable = (val: Course[]) => {
+  courseSelection.value = val
+}
+
+const saveTable = () => {
+  requestPlanDesignSaveAndSubmit(0)
+}
+
+const submitTable = () => {
+  requestPlanDesignSaveAndSubmit(1)
+}
+
+const resetTable = () => {
+  multipleTableRef.value?.clearSelection()
 }
 </script>
 
 <template>
   <div class="student-plan-container">
     <div class="student-plan-btns" v-show="!isSearch">
-      <el-button type="primary">保存</el-button>
-      <el-button type="primary">提交</el-button>
-      <el-button type="primary">重置</el-button>
+      <el-button type="primary" @click="saveTable" :disabled="isSubmit">
+        保存
+      </el-button>
+      <el-button type="primary" @click="submitTable" :disabled="isSubmit">
+        提交
+      </el-button>
+      <el-button type="primary" @click="resetTable" :disabled="isSubmit">
+        重置
+      </el-button>
     </div>
     <el-table
       class="student-plan-table"
       :class="{ 'student-plan-table-top': isSearch }"
       ref="multipleTableRef"
       :data="currentPageData"
-      @selection-change="selectionTable"
+      @selection-change="selectionChangeTable"
+      row-key="courseId"
     >
-      <el-table-column type="selection" v-if="!isSearch" />
+      <el-table-column
+        v-if="!isSearch"
+        type="selection"
+        :selectable="() => !isSubmit"
+        reserve-selection
+      />
       <el-table-column property="courseId" label="课程编号" align="center" />
       <el-table-column property="courseName" label="课程名称" align="center" />
       <el-table-column property="courseType" label="课程类别" align="center">
