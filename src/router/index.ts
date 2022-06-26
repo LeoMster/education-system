@@ -4,7 +4,6 @@ import StudentView from '@/views/student/StudentView.vue'
 import TeacherView from '@/views/teacher/TeacherView.vue'
 import SecretaryView from '@/views/secretary/SecretaryView.vue'
 import studentRoutes from './student'
-import teacherRoutes from './teacher'
 import secretaryRoutes from './secretary'
 
 const router = createRouter({
@@ -25,10 +24,8 @@ const router = createRouter({
     },
     {
       path: '/teacher',
-      redirect: '/teacher/course-manage',
       name: '教师',
       component: TeacherView,
-      children: [...teacherRoutes]
     },
     {
       path: '/secretary',

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
 import TheLayout from '@/components/layout/TheLayout.vue'
+import TeacherCourseManage from '@/views/teacher/TeacherCourseManage.vue'
 </script>
 
 <template>
   <TheLayout>
-    <RouterView />
+    <TeacherCourseManage />
   </TheLayout>
 </template>

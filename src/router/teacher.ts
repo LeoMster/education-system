@@ -1,11 +1,11 @@
-import TeacherCourseManage from '@/views/teacher/TeacherCourseManage.vue'
+import TeacherView from '@/views/teacher/TeacherView.vue'
 import { EditPen } from '@element-plus/icons-vue'
 
 export default [
- {
-    path: '/teacher/course-manage',
+  {
+    path: '/teacher',
     name: '课程管理',
-    component: TeacherCourseManage,
+    component: TeacherView,
     icon: EditPen
   }
 ]
