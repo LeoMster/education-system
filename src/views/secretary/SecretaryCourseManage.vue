@@ -55,7 +55,7 @@ const requestDeleteCourse = async (id: string) => {
     if (code === 200) {
       ElMessage({
         type: 'success',
-        message: '删除成功'
+        message: msg
       })
     }
     if (code === 400) {
