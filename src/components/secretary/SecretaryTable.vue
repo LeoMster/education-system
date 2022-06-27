@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
-import { getStudentMsgList } from '@/api/secretary'
+import { getStudentMsgList, checkCourseList } from '@/api/secretary'
 
 interface Student {
   studentName: string
@@ -11,13 +11,21 @@ interface Student {
   optionalScore: number
 }
 
+interface Course {
+  classId: string
+  className: string
+  score: string
+}
+
 const router = useRouter()
 const currentRoute = router.currentRoute.value.path.split('/').at(-1)
 const isVisible = ref(false)
 const tableData = ref<Student[]>([])
+const checkCourseData = ref<Course[]>([])
 
 const getId = computed(() => (currentRoute === 'professional' ? 0 : 1))
 
+/** 学生信息列表 */
 const requestStudentMsgList = async () => {
   try {
     const { data: res } = await getStudentMsgList(getId.value)
@@ -29,11 +37,25 @@ const requestStudentMsgList = async () => {
     console.log(error)
   }
 }
+/** 学生课程列表 */
+const requestCheckCourseList = async (id: string) => {
+  try {
+    const { data: res } = await checkCourseList(id)
+    const { code, data } = res
+    if (code === 200) {
+      checkCourseData.value = data
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 onMounted(() => requestStudentMsgList())
 
-const checkClassList = () => {
+const checkClassList = async (id: string) => {
   isVisible.value = !isVisible.value
+  await nextTick()
+  requestCheckCourseList(id)
 }
 </script>
 
@@ -43,25 +65,35 @@ const checkClassList = () => {
     <el-table-column property="studentId" label="学号" />
     <el-table-column property="professionId" label="专业" align="center">
       <template #default="scope">
-        {{ scope.row.professionId ? '专硕' : '学硕' }}
+        {{
+          !scope.row.professionId
+            ? '电子信息'
+            : scope.row.professionId === 1
+            ? '人工智能'
+            : '计算机技术'
+        }}
       </template>
     </el-table-column>
     <el-table-column property="requiredScore" label="必修学分" align="center" />
     <el-table-column property="optionalScore" label="选修学分" align="center" />
     <el-table-column label="操作">
-      <template #default>
-        <el-button link type="primary" @click="checkClassList">
+      <template #default="scope">
+        <el-button
+          link
+          type="primary"
+          @click="checkClassList(scope.row.studentId)"
+        >
           查看选课
         </el-button>
       </template>
     </el-table-column>
   </el-table>
   <el-dialog v-model="isVisible" title="选课信息">
-    <el-table :data="[{}]">
+    <el-table :data="checkCourseData">
       <el-table-column type="index" label="序号" width="100" align="center" />
       <el-table-column property="classId" label="课程名称" align="center" />
       <el-table-column property="className" label="课程编号" align="center" />
-      <el-table-column property="classScore" label="课程成绩" align="center" />
+      <el-table-column property="score" label="课程成绩" align="center" />
     </el-table>
   </el-dialog>
 </template>
