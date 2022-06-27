@@ -25,7 +25,7 @@ export const planDesignSaveAndSubmit = (params: SaveAndSubmitParams) => axios.po
 /** 已提交培养计划查询 */
 export const planDesignSearch = (id: string) => axios.get(`/api/student/searchPlanCourse?id=${id}`)
 /** 学生选课是否已经提交 */
-export const getCourseIsSumbit = (id: string) => axios.get(`/api/student/selectCourseResult?id=${id}`)
+export const getCourseIsSumbit = (id: string) => axios.get(`/api/student/courseIsSubmit?id=${id}`)
 /** 选课课程列表 */
 export const getCourseList = (id: string) => axios.get(`/api/student/selectCourseResult?id=${id}`)
 /** 学生选课保存和提交 */
