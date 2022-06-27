@@ -22,6 +22,14 @@ const currentRoute = router.currentRoute.value.path.split('/').at(-1)
 const isVisible = ref(false)
 const tableData = ref<Student[]>([])
 const checkCourseData = ref<Course[]>([])
+// const PAGE_SIZE = 10
+// const currentPage = ref<number>(1)
+// const currentPageData = computed(() =>
+//   courseData?.value.slice(
+//     (currentPage.value - 1) * PAGE_SIZE,
+//     currentPage.value * PAGE_SIZE
+//   )
+// )
 
 const getType = computed(() => (currentRoute === 'professional' ? 0 : 1))
 
@@ -57,6 +65,9 @@ const checkClassList = async (id: string) => {
   await nextTick()
   requestCheckCourseList(id)
 }
+// const pageChange = (page: number) => {
+//   currentPage.value = page
+// }
 </script>
 
 <template>
@@ -91,11 +102,18 @@ const checkClassList = async (id: string) => {
   <el-dialog v-model="isVisible" title="选课信息">
     <el-table :data="checkCourseData">
       <el-table-column type="index" label="序号" width="100" align="center" />
-      <el-table-column property="classId" label="课程名称" align="center" />
-      <el-table-column property="className" label="课程编号" align="center" />
+      <el-table-column property="courseId" label="课程名称" align="center" />
+      <el-table-column property="courseName" label="课程编号" align="center" />
       <el-table-column property="score" label="课程成绩" align="center" />
     </el-table>
   </el-dialog>
+  <!-- <el-pagination
+      class="student-plan-page"
+      background
+      layout="prev, pager, next"
+      :total="courseData.length"
+      @current-change="pageChange"
+    /> -->
 </template>
 
 <style scoped lang="less">

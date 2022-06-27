@@ -20,7 +20,7 @@ interface Course {
   courseTeacher: string
   courseTerm: number
   isChecked?: boolean
-  isCoursechecked?: boolean
+  isCourseChecked?: boolean
 }
 
 const props = defineProps<{
@@ -108,7 +108,7 @@ onMounted(() => {
 const defaultChecked = async () => {
   await nextTick()
   courseData.value.forEach((row) => {
-    if (row[isSelect.value ? 'isCoursechecked' : 'isChecked']) {
+    if (row[isSelect.value ? 'isCourseChecked' : 'isChecked']) {
       multipleTableRef.value?.toggleRowSelection(row, true)
     }
   })
@@ -160,7 +160,11 @@ const resetTable = () => {
       <el-table-column
         v-if="!isSearch"
         type="selection"
-        :selectable="(row: Course) => !isSubmit || !(isSelect && row.isChecked)"
+        :selectable="(row: Course) => {
+          if (isSubmit) return false
+          if (isSelect && row.isChecked) return false
+          return true
+        }"
         reserve-selection
       />
       <el-table-column property="courseId" label="课程编号" align="center" />
