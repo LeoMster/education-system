@@ -22,5 +22,7 @@ export const getIsSubmit = (id: string) => axios.get(`/api/student/planDesignISF
 export const getStudentCourseList = (id: string) => axios.get(`/api/student/searchSubmitedCourse?id=${id}`)
 /** 培养计划保存和提交 */
 export const planDesignSaveAndSubmit = (params: SaveAndSubmitParams) => axios.post(`/api/student/studentPlanDesign`, {...params}) 
+/** 已提交培养计划查询 */
+export const planDesignSearch = (id: string) => axios.get(`/api/student/searchPlanCourse?id=${id}`)
 /** 成绩查询 */
 export const getCourseScoreList = (id: string) => axios.get(`/api/student/courseScore?id=${id}`)

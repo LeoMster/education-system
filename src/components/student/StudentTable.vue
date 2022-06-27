@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, nextTick } from 'vue'
 import { ElMessage, ElTable } from 'element-plus'
-import { getIsSubmit, getStudentCourseList, planDesignSaveAndSubmit } from '@/api/student'
+import {
+  getIsSubmit,
+  getStudentCourseList,
+  planDesignSaveAndSubmit,
+  planDesignSearch
+} from '@/api/student'
 
 interface Course {
   courseId: string
@@ -63,7 +68,9 @@ const requestStudentCourseList = async () => {
 const requestPlanDesignSaveAndSubmit = async (type: number) => {
   const list = courseSelection.value.map((select) => select.courseId)
   try {
-    const { data: res } = await planDesignSaveAndSubmit({ type, id, list })
+    const { data: res } = isSearch.value
+      ? await planDesignSearch(id)
+      : await planDesignSaveAndSubmit({ type, id, list })
     const { code, msg } = res
     if (code === 200) {
       ElMessage({
@@ -110,6 +117,7 @@ const saveTable = () => {
 
 const submitTable = () => {
   requestPlanDesignSaveAndSubmit(1)
+  isSubmit.value = true
 }
 
 const resetTable = () => {
