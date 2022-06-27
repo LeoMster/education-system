@@ -23,12 +23,12 @@ const isVisible = ref(false)
 const tableData = ref<Student[]>([])
 const checkCourseData = ref<Course[]>([])
 
-const getId = computed(() => (currentRoute === 'professional' ? 0 : 1))
+const getType = computed(() => (currentRoute === 'professional' ? 0 : 1))
 
 /** 学生信息列表 */
 const requestStudentMsgList = async () => {
   try {
-    const { data: res } = await getStudentMsgList(getId.value)
+    const { data: res } = await getStudentMsgList(getType.value)
     const { code, data } = res
     if (code === 200) {
       tableData.value = data
