@@ -5,7 +5,10 @@ import {
   getIsSubmit,
   getStudentCourseList,
   planDesignSaveAndSubmit,
-  planDesignSearch
+  planDesignSearch,
+  getCourseIsSumbit,
+  getCourseList,
+  planDesignCourseSaveAndSubmit
 } from '@/api/student'
 
 interface Course {
@@ -16,7 +19,8 @@ interface Course {
   courseResult: number
   courseTeacher: string
   courseTerm: number
-  isChecked: boolean
+  isChecked?: boolean
+  isCoursechecked?: boolean
 }
 
 const props = defineProps<{
@@ -32,6 +36,7 @@ const currentPage = ref<number>(1)
 const PAGE_SIZE = 10
 
 const isSearch = computed(() => props.routePath === 'search')
+const isSelect = computed(() => props.routePath === 'select')
 const currentPageData = computed(() =>
   courseData?.value.slice(
     (currentPage.value - 1) * PAGE_SIZE,
@@ -42,7 +47,9 @@ const currentPageData = computed(() =>
 /** 是否已经提交 */
 const requestIsSubmit = async () => {
   try {
-    const { data: res } = await getIsSubmit(id)
+    const { data: res } = isSelect.value
+      ? await getCourseIsSumbit(id)
+      : await getIsSubmit(id)
     const { code, data } = res
     if (code === 200) {
       isSubmit.value = data
@@ -54,7 +61,11 @@ const requestIsSubmit = async () => {
 /** 请求课程列表 */
 const requestStudentCourseList = async () => {
   try {
-    const { data: res } = await getStudentCourseList(id)
+    const { data: res } = isSearch.value
+      ? await planDesignSearch(id)
+      : isSelect.value
+      ? await getCourseList(id)
+      : await getStudentCourseList(id)
     const { code, data } = res
     if (code === 200) {
       courseData.value = data
@@ -68,8 +79,8 @@ const requestStudentCourseList = async () => {
 const requestPlanDesignSaveAndSubmit = async (type: number) => {
   const list = courseSelection.value.map((select) => select.courseId)
   try {
-    const { data: res } = isSearch.value
-      ? await planDesignSearch(id)
+    const { data: res } = isSelect.value
+      ? await planDesignCourseSaveAndSubmit({ type, id, list })
       : await planDesignSaveAndSubmit({ type, id, list })
     const { code, msg } = res
     if (code === 200) {
@@ -97,7 +108,7 @@ onMounted(() => {
 const defaultChecked = async () => {
   await nextTick()
   courseData.value.forEach((row) => {
-    if (row.isChecked) {
+    if (row[isSelect.value ? 'isCoursechecked' : 'isChecked']) {
       multipleTableRef.value?.toggleRowSelection(row, true)
     }
   })

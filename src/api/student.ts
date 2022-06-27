@@ -24,5 +24,11 @@ export const getStudentCourseList = (id: string) => axios.get(`/api/student/sear
 export const planDesignSaveAndSubmit = (params: SaveAndSubmitParams) => axios.post(`/api/student/studentPlanDesign`, {...params}) 
 /** 已提交培养计划查询 */
 export const planDesignSearch = (id: string) => axios.get(`/api/student/searchPlanCourse?id=${id}`)
+/** 学生选课是否已经提交 */
+export const getCourseIsSumbit = (id: string) => axios.get(`/api/student/selectCourseResult?id=${id}`)
+/** 选课课程列表 */
+export const getCourseList = (id: string) => axios.get(`/api/student/selectCourseResult?id=${id}`)
+/** 学生选课保存和提交 */
+export const planDesignCourseSaveAndSubmit = (params: SaveAndSubmitParams) => axios.post(`/api/student/studentCourseDesign`, {...params}) 
 /** 成绩查询 */
 export const getCourseScoreList = (id: string) => axios.get(`/api/student/courseScore?id=${id}`)
