@@ -44,7 +44,7 @@ const submitScores = () => {
     </el-button>
     <el-table class="course-manage-table" ref="tableRef" :data="tableData">
       <el-table-column property="studentName" label="姓名" align="center" />
-      <el-table-column property="studentId" label="学号" />
+      <el-table-column property="studentId" label="学号" align="center" />
       <el-table-column property="department" label="院系" align="center" />
       <el-table-column property="professionName" label="专业" align="center" />
       <el-table-column label="操作">

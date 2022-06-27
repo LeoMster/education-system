@@ -160,7 +160,7 @@ const resetTable = () => {
       <el-table-column
         v-if="!isSearch"
         type="selection"
-        :selectable="() => !isSubmit"
+        :selectable="(row: Course) => !isSubmit || !(isSelect && row.isChecked)"
         reserve-selection
       />
       <el-table-column property="courseId" label="课程编号" align="center" />
