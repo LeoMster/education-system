@@ -37,4 +37,11 @@ const router = createRouter({
   ]
 })
 
+router.beforeEach((to, from) => {
+  const { id } = JSON.parse(localStorage.getItem('auth')|| '{}')
+  if ((!id || from.path.split('/')[1] !== to.path.split('/')[1]) && to.name !== '登录') {
+    return { name: '登录' }
+  }
+})
+
 export default router
