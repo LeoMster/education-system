@@ -22,14 +22,15 @@ const currentRoute = router.currentRoute.value.path.split('/').at(-1)
 const isVisible = ref(false)
 const tableData = ref<Student[]>([])
 const checkCourseData = ref<Course[]>([])
-// const PAGE_SIZE = 10
-// const currentPage = ref<number>(1)
-// const currentPageData = computed(() =>
-//   courseData?.value.slice(
-//     (currentPage.value - 1) * PAGE_SIZE,
-//     currentPage.value * PAGE_SIZE
-//   )
-// )
+const currentPage = ref<number>(1)
+const PAGE_SIZE = 10
+
+const currentPageData = computed(() =>
+  tableData.value.slice(
+    (currentPage.value - 1) * PAGE_SIZE,
+    currentPage.value * PAGE_SIZE
+  )
+)
 
 const getType = computed(() => (currentRoute === 'professional' ? 0 : 1))
 
@@ -65,13 +66,18 @@ const checkClassList = async (id: string) => {
   await nextTick()
   requestCheckCourseList(id)
 }
-// const pageChange = (page: number) => {
-//   currentPage.value = page
-// }
+
+const pageChange = (page: number) => {
+  currentPage.value = page
+}
 </script>
 
 <template>
-  <el-table class="secretary-class-table" ref="tableRef" :data="tableData">
+  <el-table
+    class="secretary-class-table"
+    ref="tableRef"
+    :data="currentPageData"
+  >
     <el-table-column property="studentName" label="姓名" align="center" />
     <el-table-column property="studentId" label="学号" />
     <el-table-column property="professionId" label="专业" align="center">
@@ -107,13 +113,13 @@ const checkClassList = async (id: string) => {
       <el-table-column property="score" label="课程成绩" align="center" />
     </el-table>
   </el-dialog>
-  <!-- <el-pagination
-      class="student-plan-page"
-      background
-      layout="prev, pager, next"
-      :total="courseData.length"
-      @current-change="pageChange"
-    /> -->
+  <el-pagination
+    class="student-plan-page"
+    background
+    layout="prev, pager, next"
+    :total="tableData.length"
+    @current-change="pageChange"
+  />
 </template>
 
 <style scoped lang="less">
