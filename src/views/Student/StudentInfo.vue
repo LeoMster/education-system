@@ -9,7 +9,7 @@ interface StudentMsg {
   department: string
   professionId: number
   studentImg: string
-  requiredScore: number
+  requriedScore: number
   optionalScore: number
   allScore: number
 }
@@ -21,7 +21,7 @@ const studentMsg = ref<StudentMsg>({
   department: '',
   professionId: 0,
   studentImg: '',
-  requiredScore: 0,
+  requriedScore: 0,
   optionalScore: 0,
   allScore: 0
 })
@@ -48,6 +48,7 @@ const requestStudentMsg = async () => {
     const { code, data } = res
     if (code === 200) {
       studentMsg.value = data[0]
+      console.log(studentMsg.value.requriedScore);
     }
   } catch (error) {
     console.log(error)
@@ -99,7 +100,7 @@ onMounted(() => {
         </el-col>
         <el-col class="student-info-col" :span="8">
           <div class="student-info-score-container student-info-col">
-            <p>{{ studentMsg.requiredScore }}</p>
+            <p>{{studentMsg.requriedScore}}</p>
             <p>总计18</p>
           </div>
           <h6>必修学分</h6>
