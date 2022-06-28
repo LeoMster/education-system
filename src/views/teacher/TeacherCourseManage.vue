@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { getIsSubmit, getStudentScoreList, submitScoures } from '@/api/teacher'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
@@ -14,6 +14,15 @@ interface TableItem {
 const { id } = JSON.parse(localStorage.getItem('auth') || '{}')
 const isSubmit = ref(false)
 const tableData = ref<TableItem[]>([])
+const currentPage = ref(1)
+const PAGE_SIZE = 10
+
+const currentPageData = computed(() =>
+  tableData?.value.slice(
+    (currentPage.value - 1) * PAGE_SIZE,
+    currentPage.value * PAGE_SIZE
+  )
+)
 
 /** 是否已经提交 */
 const requestIsSumbit = async () => {
@@ -71,6 +80,10 @@ onMounted(() => {
   requestStudentCourseList()
 })
 
+const pageChange = (page: number) => {
+  currentPage.value = page
+}
+
 const submitScores = () => {
   //console.log(tableData.value[0].score === null);
   if (tableData.value.some(({ score }) => score === null)) {
@@ -107,7 +120,11 @@ const submitScores = () => {
     >
       提交
     </el-button>
-    <el-table class="course-manage-table" ref="tableRef" :data="tableData">
+    <el-table
+      class="course-manage-table"
+      ref="tableRef"
+      :data="currentPageData"
+    >
       <el-table-column property="studentName" label="姓名" align="center" />
       <el-table-column property="studentId" label="学号" align="center" />
       <el-table-column property="department" label="院系" align="center" />
@@ -139,7 +156,8 @@ const submitScores = () => {
       class="course-manage-page"
       background
       layout="prev, pager, next"
-      :total="50"
+      :total="tableData.length"
+      @current-change="pageChange"
     />
   </div>
 </template>

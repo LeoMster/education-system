@@ -88,7 +88,7 @@ const requestPlanDesignSaveAndSubmit = async (type: number) => {
         type: 'success',
         message: msg
       })
-      if(type == 1){
+      if (type === 1) {
         isSubmit.value = true
       }
     }
