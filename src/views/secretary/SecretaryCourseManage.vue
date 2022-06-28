@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, nextTick, onMounted } from 'vue'
+import { ref, nextTick, onMounted,computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getCourseList, getStudentList, deleteCourse } from '@/api/secretary'
 
@@ -22,7 +22,15 @@ interface Student {
 const isVisible = ref(false)
 const tableData = ref<Course[]>([])
 const courseListData = ref<Student[]>([])
+const currentPage = ref<number>(1)
+const PAGE_SIZE = 10
 
+const currentPageData = computed(() =>
+  tableData.value.slice(
+    (currentPage.value - 1) * PAGE_SIZE,
+    currentPage.value * PAGE_SIZE
+  )
+)
 /** 课程列表 */
 const requestCourseList = async () => {
   try {
@@ -88,6 +96,9 @@ const deleteCourseList = (id: string) => {
     })
 }
 
+const pageChange = (page: number) => {
+  currentPage.value = page
+}
 const checkStudentList = async (id: string) => {
   isVisible.value = !isVisible.value
   await nextTick()
@@ -96,7 +107,7 @@ const checkStudentList = async (id: string) => {
 </script>
 
 <template>
-  <el-table class="secretary-class-table" ref="tableRef" :data="tableData">
+  <el-table class="secretary-class-table" ref="tableRef" :data="currentPageData">
     <el-table-column property="courseId" label="课程号" align="center" />
     <el-table-column property="courseName" label="课程名称" align="center" />
     <el-table-column property="courseTime" label="学时" align="center" />
@@ -141,6 +152,13 @@ const checkStudentList = async (id: string) => {
       </el-table-column>
     </el-table>
   </el-dialog>
+    <el-pagination
+    class="student-plan-page"
+    background
+    layout="prev, pager, next"
+    :total="tableData.length"
+    @current-change="pageChange"
+  />
 </template>
 
 <style scoped lang="less">
