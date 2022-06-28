@@ -53,7 +53,23 @@ const requestStudentMsg = async () => {
     console.log(error)
   }
 }
+const changeScoreColor = (studentMsg: StudentMsg, type: String) => {
+  //console.log(type == 'allScore')
+  if (type == 'allScore') {
+    if (studentMsg.allScore < 34) {
+      return "color:red"
+    }
+  } else if (type == 'requriedScore') {
+    if (studentMsg.requriedScore < 18) {
+      return "color:red"
+    }
+  }else{
+    if(studentMsg.optionalScore < 14){
+       return "color:red"
+    }
+  }
 
+}
 onMounted(() => {
   requestStudentMsg()
 })
@@ -64,11 +80,7 @@ onMounted(() => {
   <div class="student-info-container">
     <el-row>
       <el-col class="student-info-col" :span="8">
-        <el-image
-          :src="studentMsg.studentImg"
-          style="width: 120px; height: 150px"
-          fit="fill"
-        />
+        <el-image :src="studentMsg.studentImg" style="width: 120px; height: 150px" fit="fill" />
       </el-col>
       <el-col :span="16">
         <el-descriptions title="学生基本信息" :column="2">
@@ -93,21 +105,21 @@ onMounted(() => {
       <el-row>
         <el-col class="student-info-col" :span="8">
           <div class="student-info-score-container student-info-col">
-            <p>{{ studentMsg.allScore }}</p>
+            <p :style="changeScoreColor(studentMsg, 'allScore')">{{ studentMsg.allScore }}</p>
             <p>总计34</p>
           </div>
           <h6>总学分</h6>
         </el-col>
         <el-col class="student-info-col" :span="8">
           <div class="student-info-score-container student-info-col">
-            <p>{{ studentMsg.requriedScore }}</p>
+            <p :style="changeScoreColor(studentMsg, 'requriedScore')">{{ studentMsg.requriedScore }}</p>
             <p>总计18</p>
           </div>
           <h6>必修学分</h6>
         </el-col>
         <el-col class="student-info-col" :span="8">
           <div class="student-info-score-container student-info-col">
-            <p>{{ studentMsg.optionalScore }}</p>
+            <p :style="changeScoreColor(studentMsg, 'optionalScore')">{{ studentMsg.optionalScore }}</p>
             <p>总计16</p>
           </div>
           <h6>选修分</h6>
@@ -122,22 +134,27 @@ onMounted(() => {
   &-container {
     margin-top: 20px;
   }
+
   &-col {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+
     h6 {
       margin: 10px 0;
     }
   }
+
   &-score {
     margin-top: 70px;
+
     &-container {
       width: 150px;
       height: 150px;
       background-color: bisque;
       border-radius: 50%;
+
       p {
         margin: 5px 0;
       }
