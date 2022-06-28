@@ -72,7 +72,8 @@ onMounted(() => {
 })
 
 const submitScores = () => {
-  if (tableData.value.some(({ score }) => score === '')) {
+  //console.log(tableData.value[0].score === null);
+  if (tableData.value.some(({ score }) => score === null)) {
     ElMessage({
       type: 'error',
       message: '还有暂未输入的成绩！'
