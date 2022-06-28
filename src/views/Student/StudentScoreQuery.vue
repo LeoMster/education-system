@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { getCourseScoreList } from '@/api/student'
-import { computed } from '@vue/reactivity';
 
 interface Score {
   courseName: string
   courseResult: number
   courseTerm: number
-  score: number,
+  score: number
 }
 
 const requiredScore = ref('')
@@ -45,14 +44,20 @@ onMounted(() => requestScoreData())
     </div>
     <div>
       <el-descriptions :column="3" border>
-        <el-descriptions-item label="必修学分">{{requiredScore}}</el-descriptions-item>
+        <el-descriptions-item label="必修学分">{{
+          requiredScore
+        }}</el-descriptions-item>
         <el-descriptions-item label="应修必修学分">18</el-descriptions-item>
         <el-descriptions-item label="要求最低必修学分">0</el-descriptions-item>
-        <el-descriptions-item label="选修学分">{{optionalScore}}</el-descriptions-item>
+        <el-descriptions-item label="选修学分">{{
+          optionalScore
+        }}</el-descriptions-item>
         <el-descriptions-item label="应修选修学分" :span="2">
           16
         </el-descriptions-item>
-        <el-descriptions-item label="总学分">{{allScore}}</el-descriptions-item>
+        <el-descriptions-item label="总学分">{{
+          allScore
+        }}</el-descriptions-item>
         <el-descriptions-item label="应修总学分">34</el-descriptions-item>
         <el-descriptions-item label="要求最低总学分">0</el-descriptions-item>
       </el-descriptions>

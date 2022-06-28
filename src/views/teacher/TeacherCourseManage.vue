@@ -85,7 +85,6 @@ const pageChange = (page: number) => {
 }
 
 const submitScores = () => {
-  //console.log(tableData.value[0].score === null);
   if (tableData.value.some(({ score }) => score === null)) {
     ElMessage({
       type: 'error',

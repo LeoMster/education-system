@@ -48,7 +48,6 @@ const requestStudentMsg = async () => {
     const { code, data } = res
     if (code === 200) {
       studentMsg.value = data[0]
-      console.log(studentMsg.value.requriedScore);
     }
   } catch (error) {
     console.log(error)
@@ -100,7 +99,7 @@ onMounted(() => {
         </el-col>
         <el-col class="student-info-col" :span="8">
           <div class="student-info-score-container student-info-col">
-            <p>{{studentMsg.requriedScore}}</p>
+            <p>{{ studentMsg.requriedScore }}</p>
             <p>总计18</p>
           </div>
           <h6>必修学分</h6>
