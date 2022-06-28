@@ -33,16 +33,23 @@ const isSubmit = ref<boolean>(false)
 const courseData = ref<Course[]>([])
 const courseSelection = ref<Course[]>([])
 const currentPage = ref<number>(1)
+const iptValue = ref('')
 const PAGE_SIZE = 10
 
 const isSearch = computed(() => props.routePath === 'search')
 const isSelect = computed(() => props.routePath === 'select')
-const currentPageData = computed(() =>
-  courseData?.value.slice(
+const searchData = computed(() =>
+  courseData?.value.filter(({ courseName }) =>
+    courseName.includes(iptValue.value)
+  )
+)
+const currentPageData = computed(() => {
+  const data = iptValue.value ? searchData : courseData
+  return data?.value.slice(
     (currentPage.value - 1) * PAGE_SIZE,
     currentPage.value * PAGE_SIZE
   )
-)
+})
 
 /** 是否已经提交 */
 const requestIsSubmit = async () => {
@@ -141,6 +148,13 @@ const resetTable = () => {
 <template>
   <div class="student-plan-container">
     <div class="student-plan-btns" v-show="!isSearch">
+      <span class="student-plan-search-label">搜索：</span>
+      <el-input
+        class="student-plan-ipt"
+        v-model.trim="iptValue"
+        clearable
+        placeholder="输入课程名称"
+      />
       <el-button type="primary" @click="saveTable" :disabled="isSubmit">
         保存
       </el-button>
@@ -189,7 +203,7 @@ const resetTable = () => {
       class="student-plan-page"
       background
       layout="prev, pager, next"
-      :total="courseData.length"
+      :total="iptValue ? searchData.length : courseData.length"
       @current-change="pageChange"
     />
   </div>
@@ -214,6 +228,15 @@ const resetTable = () => {
   }
   &-unvisible {
     display: none;
+  }
+  &-ipt {
+    width: 20%;
+    float: left;
+  }
+  &-search-label {
+    float: left;
+    line-height: 30px;
+    color: rgb(144, 147, 152);
   }
 }
 </style>
