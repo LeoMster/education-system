@@ -60,6 +60,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <Transition></Transition>
   <div class="student-info-container">
     <el-row>
       <el-col class="student-info-col" :span="8">

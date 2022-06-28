@@ -138,7 +138,7 @@ const submitForm = (formRef?: FormInstance) => {
   &-bg {
     width: 100%;
     height: 100vh;
-    // background-image: url('@/assets/bg.jpg');
+    background-image: url('@/assets/bg.webp');
     background-size: 100% 100%;
   }
   &-container {
@@ -151,8 +151,8 @@ const submitForm = (formRef?: FormInstance) => {
   }
   &-header {
     padding: 20px;
-    // background-color: #545c64;
-    // color: #ffd04b;
+    background-color: #92beeb;
+    color: #fff;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     border-bottom: 1px solid rgb(228, 231, 237);
