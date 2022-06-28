@@ -16,12 +16,7 @@ const isCollapse = ref(true)
 const router = useRouter()
 
 const currentMenuList = computed(() => menuList[type])
-const defaultActiveMenu = computed(() => {
-  const menuFirstItem = menuList[type][0]
-  return menuFirstItem.children?.length
-    ? menuFirstItem.children[0].path
-    : menuFirstItem.path
-})
+const defaultActiveMenu = computed(() => router.currentRoute.value.path)
 
 const toggleCollapse = () => {
   isCollapse.value = !isCollapse.value
