@@ -24,13 +24,22 @@ const tableData = ref<Student[]>([])
 const checkCourseData = ref<Course[]>([])
 const currentPage = ref<number>(1)
 const PAGE_SIZE = 10
+const iptValue = ref('')
 
-const currentPageData = computed(() =>
-  tableData.value.slice(
+
+/**搜索框 */
+const searchData = computed(() =>
+  tableData?.value.filter(({ studentName }) =>
+    studentName.includes(iptValue.value)
+  )
+)
+const currentPageData = computed(() => {
+  const data = iptValue.value ? searchData : tableData
+  return data?.value.slice(
     (currentPage.value - 1) * PAGE_SIZE,
     currentPage.value * PAGE_SIZE
   )
-)
+})
 
 const getType = computed(() => (currentRoute === 'professional' ? 0 : 1))
 
@@ -73,21 +82,19 @@ const pageChange = (page: number) => {
 </script>
 
 <template>
-  <el-table
-    class="secretary-class-table"
-    ref="tableRef"
-    :data="currentPageData"
-  >
+  <span class="secretary-class-search-label">搜索：</span>
+  <el-input class="secretary-class-ipt" v-model.trim="iptValue" clearable placeholder="输入学生姓名" />
+  <el-table class="secretary-class-table" ref="tableRef" :data="currentPageData">
     <el-table-column property="studentName" label="姓名" align="center" />
     <el-table-column property="studentId" label="学号" />
     <el-table-column property="professionId" label="专业" align="center">
       <template #default="scope">
         {{
-          !scope.row.professionId
-            ? '电子信息'
-            : scope.row.professionId === 1
-            ? '人工智能'
-            : '计算机技术'
+            !scope.row.professionId
+              ? '电子信息'
+              : scope.row.professionId === 1
+                ? '人工智能'
+                : '计算机技术'
         }}
       </template>
     </el-table-column>
@@ -95,11 +102,7 @@ const pageChange = (page: number) => {
     <el-table-column property="optionalScore" label="选修学分" align="center" />
     <el-table-column label="操作">
       <template #default="scope">
-        <el-button
-          link
-          type="primary"
-          @click="checkClassList(scope.row.studentId)"
-        >
+        <el-button link type="primary" @click="checkClassList(scope.row.studentId)">
           查看选课
         </el-button>
       </template>
@@ -113,19 +116,25 @@ const pageChange = (page: number) => {
       <el-table-column property="score" label="课程成绩" align="center" />
     </el-table>
   </el-dialog>
-  <el-pagination
-    class="student-plan-page"
-    background
-    layout="prev, pager, next"
-    :total="tableData.length"
-    @current-change="pageChange"
-  />
+  <el-pagination class="student-plan-page" background layout="prev, pager, next" :total="iptValue ? searchData.length : tableData.length"
+    @current-change="pageChange" />
 </template>
 
 <style scoped lang="less">
 .secretary-class {
   &-table {
     margin: 20px 0;
+  }
+
+  &-ipt {
+    width: 20%;
+    float: left;
+  }
+
+  &-search-label {
+    float: left;
+    line-height: 30px;
+    color: rgb(144, 147, 152);
   }
 }
 </style>

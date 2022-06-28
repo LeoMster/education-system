@@ -24,13 +24,21 @@ const tableData = ref<Course[]>([])
 const courseListData = ref<Student[]>([])
 const currentPage = ref<number>(1)
 const PAGE_SIZE = 10
+const iptValue = ref('')
 
-const currentPageData = computed(() =>
-  tableData.value.slice(
+/**搜索框 */
+const searchData = computed(() =>
+  tableData?.value.filter(({ courseName }) =>
+    courseName.includes(iptValue.value)
+  )
+)
+const currentPageData = computed(() =>{
+  const data = iptValue.value ? searchData : tableData
+  return data?.value.slice(
     (currentPage.value - 1) * PAGE_SIZE,
     currentPage.value * PAGE_SIZE
   )
-)
+})
 /** 课程列表 */
 const requestCourseList = async () => {
   try {
@@ -107,6 +115,8 @@ const checkStudentList = async (id: string) => {
 </script>
 
 <template>
+  <span class="secretary-class-search-label">搜索：</span>
+  <el-input class="secretary-class-ipt" v-model.trim="iptValue" clearable placeholder="输入课程姓名" />
   <el-table class="secretary-class-table" ref="tableRef" :data="currentPageData">
     <el-table-column property="courseId" label="课程号" align="center" />
     <el-table-column property="courseName" label="课程名称" align="center" />
@@ -156,7 +166,7 @@ const checkStudentList = async (id: string) => {
     class="student-plan-page"
     background
     layout="prev, pager, next"
-    :total="tableData.length"
+    :total="iptValue ? searchData.length : tableData.length"
     @current-change="pageChange"
   />
 </template>
@@ -165,6 +175,16 @@ const checkStudentList = async (id: string) => {
 .secretary-class {
   &-table {
     margin: 20px 0;
+  }
+    &-ipt {
+    width: 20%;
+    float: left;
+  }
+
+  &-search-label {
+    float: left;
+    line-height: 30px;
+    color: rgb(144, 147, 152);
   }
 }
 </style>

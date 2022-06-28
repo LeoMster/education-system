@@ -16,14 +16,22 @@ const isSubmit = ref(false)
 const tableData = ref<TableItem[]>([])
 const currentPage = ref(1)
 const PAGE_SIZE = 10
+const iptValue = ref('')
 
-const currentPageData = computed(() =>
-  tableData?.value.slice(
+
+/**搜索框 */
+const searchData = computed(() =>
+  tableData?.value.filter(({ studentName }) =>
+    studentName.includes(iptValue.value)
+  )
+)
+const currentPageData = computed(() => {
+  const data = iptValue.value ? searchData : tableData
+  return data?.value.slice(
     (currentPage.value - 1) * PAGE_SIZE,
     currentPage.value * PAGE_SIZE
   )
-)
-
+})
 /** 是否已经提交 */
 const requestIsSumbit = async () => {
   try {
@@ -111,53 +119,35 @@ const submitScores = () => {
 
 <template>
   <div class="course-manage-container">
-    <el-button
-      class="course-manage-btn"
-      type="primary"
-      @click="submitScores"
-      :disabled="isSubmit"
-    >
+    <span class="course-manage-search-label">搜索：</span>
+    <el-input class="course-manage-ipt" v-model.trim="iptValue" clearable placeholder="输入学生姓名" />
+    <el-button class="course-manage-btn" type="primary" @click="submitScores" :disabled="isSubmit">
       提交
     </el-button>
-    <el-table
-      class="course-manage-table"
-      ref="tableRef"
-      :data="currentPageData"
-    >
+    <el-table class="course-manage-table" ref="tableRef" :data="currentPageData">
       <el-table-column property="studentName" label="姓名" align="center" />
       <el-table-column property="studentId" label="学号" align="center" />
       <el-table-column property="department" label="院系" align="center" />
       <el-table-column property="professionId" label="专业" align="center">
         <template #default="scope">
           {{
-            !scope.row.professionId
-              ? '电子信息'
-              : scope.row.professionId === 1
-              ? '人工智能'
-              : '计算机技术'
+              !scope.row.professionId
+                ? '电子信息'
+                : scope.row.professionId === 1
+                  ? '人工智能'
+                  : '计算机技术'
           }}
         </template>
       </el-table-column>
       <el-table-column label="操作">
         <template #default="scope">
-          <el-input
-            v-model="scope.row.score"
-            type="number"
-            placeholder="请输入成绩"
-            :min="0"
-            :max="100"
-            :disabled="isSubmit"
-          />
+          <el-input v-model="scope.row.score" type="number" placeholder="请输入成绩" :min="0" :max="100"
+            :disabled="isSubmit" />
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      class="course-manage-page"
-      background
-      layout="prev, pager, next"
-      :total="tableData.length"
-      @current-change="pageChange"
-    />
+    <el-pagination class="course-manage-page" background layout="prev, pager, next" :total="iptValue ? searchData.length : tableData.length"
+      @current-change="pageChange" />
   </div>
 </template>
 
@@ -166,14 +156,28 @@ const submitScores = () => {
   &-container {
     text-align: right;
   }
+
   &-btn {
     margin-top: 20px;
   }
+
   &-table {
     margin: 40px 0 40px 0;
   }
+
   &-page {
     float: right;
+  }
+
+  &-ipt {
+    width: 20%;
+    float: left;
+  }
+
+  &-search-label {
+    float: left;
+    line-height: 30px;
+    color: rgb(144, 147, 152);
   }
 }
 </style>
